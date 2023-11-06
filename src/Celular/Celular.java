@@ -23,11 +23,20 @@ public boolean cargarCel() {
 }
 
 public boolean eliminarCel() {
+	if(dc.eliminarCel(this.getId())) {
+		return true;
+	}else {
 	return true;
+}
 }
 public boolean actualizarCel() {
-	return true;
+	if(dc.actualizarCel(this)) {
+		return true;
+	}else {
+		return false;
+	}
 }
+
 
 public Celular() {
 	
@@ -53,6 +62,7 @@ public void setModelo(String modelo) {
 public String getSistema() {
 	return Sistema;
 }
+
 public void setSistema(String sistema) {
 	Sistema = sistema;
 }

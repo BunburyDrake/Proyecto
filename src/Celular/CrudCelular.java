@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class CrudCelular {
 
@@ -59,6 +60,7 @@ public class CrudCelular {
 	 */
 	private void initialize() {
 		frmCelular = new JFrame();
+		frmCelular.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alumno\\Downloads\\1698764131163.jpg"));
 		frmCelular.setTitle("CrudCelular");
 		frmCelular.setBounds(100, 100, 411, 251);
 		frmCelular.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,23 +184,56 @@ public class CrudCelular {
 				}
 			}
 		});
-		btnAgregar.setBounds(245, 11, 89, 23);
+		btnAgregar.setBounds(245, 11, 125, 23);
 		frmCelular.getContentPane().add(btnAgregar);
 		
 		JButton btnElimanar = new JButton("Eliminar");
-		btnElimanar.setBounds(245, 43, 89, 23);
+		btnElimanar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					int Idcel=Integer.parseInt(JOptionPane.showInputDialog("ID a cargar"));
+					cel.setId(Idcel);
+					if(cel.eliminarCel()) {
+						JOptionPane.showMessageDialog(null, "good");
+					}else {
+						JOptionPane.showMessageDialog(null, "Error ");
+					}
+			}catch(Exception e2) {
+				e2.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error ");
+			}
+			}
+		});
+		btnElimanar.setBounds(245, 43, 125, 23);
 		frmCelular.getContentPane().add(btnElimanar);
 		
 		JButton btnEditar = new JButton("Edtiar");
-		btnEditar.setBounds(245, 75, 89, 23);
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					cel.setMarca(txtMarca.getText());
+					cel.setModelo(txtModelo.getText());
+				    cel.setSistema(txtSistema.getText());
+					cel.setProcesador(txtProcesador.getText());
+					if(cel.actualizarCel()) {
+						JOptionPane.showMessageDialog(null, "Inserto Correctamente");
+					}else {
+					JOptionPane.showMessageDialog(null, "Error ");
+					}
+					}catch(Exception e2) {
+						JOptionPane.showMessageDialog(null, "Error Try");
+					}
+			}
+		});
+		btnEditar.setBounds(245, 75, 125, 23);
 		frmCelular.getContentPane().add(btnEditar);
 		
 		JButton btnCargar = new JButton("Cargar");
 		btnCargar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
-					int idcel=Integer.parseInt(JOptionPane.showInputDialog("ID a cargar"));
-					cel.setId(idcel);
+			try {
+					int Idcel=Integer.parseInt(JOptionPane.showInputDialog("ID a cargar"));
+					cel.setId(Idcel);
 					if(cel.cargarCel()) {
 						txtId.setText(""+cel.getId());
 						txtMarca.setText(cel.getMarca());
@@ -209,10 +244,13 @@ public class CrudCelular {
 					}else {
 						JOptionPane.showMessageDialog(null, "Error ");
 					}
-				
+			}catch(Exception e2) {
+				e2.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error ");
+			}
 			}
 		});
-		btnCargar.setBounds(245, 107, 89, 23);
+		btnCargar.setBounds(245, 107, 125, 23);
 		frmCelular.getContentPane().add(btnCargar);
 		
 		btnBorrar = new JButton("Borrar");
@@ -221,7 +259,7 @@ public class CrudCelular {
 				limpiarFormulario();
 			}
 		});
-		btnBorrar.setBounds(245, 140, 89, 23);
+		btnBorrar.setBounds(245, 140, 125, 23);
 		frmCelular.getContentPane().add(btnBorrar);
 	}
 	public void limpiarFormulario() {
