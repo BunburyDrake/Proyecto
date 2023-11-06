@@ -8,39 +8,37 @@ class DataCelularTest {
 
 	@Test
 	void testInsertarCel() {
-		Celular c=new Celular();
-		c.setId(11);
-		c.setMarca("hola");
-		c.setModelo("lol");
-		c.setProcesador("lolillo");
-		c.setSistema("android");
-		assertTrue(c.insertarCel());
+		Celular x=new Celular();
+		x.setId(15);
+		x.setMarca("xaimo");
+		x.setModelo("holi");
+		x.setProcesador("snap");
+		x.setSistema("eowjgore");
+		assertTrue(x.insertarCel());
 	}
 
 	@Test
 	void testCargarCel() {
-		Celular c=new Celular();
-		c.setId(11);
-		assertTrue(c.cargarCel());
+		Celular x=new Celular();
+		x.setId(15);
+		
+		assertTrue(x.cargarCel());
 	}
-
-	
-
 	@Test
 	void testActualizarCel() {
-		Celular c=new Celular();
-		c.setId(11);
-		c.setMarca("hola");
-		c.setModelo("lol");
-		c.setProcesador("lolillo");
-		c.setSistema("android");
-		assertTrue(c.actualizarCel());
+		Celular x=new Celular();
+		x.setId(12);
+		x.setMarca("xaimo");
+		x.setModelo("holi");
+		x.setProcesador("snap11");
+		x.setSistema("eowjgore");
+		assertTrue(x.actualizarCel());
 	}
 	@Test
 	void testEliminarCel() {
-		Celular c=new Celular();
-		c.setId(12);
-		assertTrue(c.eliminarCel());
+		Celular x=new Celular();
+		x.setId(15);
+		assertTrue(x.eliminarCel());
 	}
 
 }

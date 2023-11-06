@@ -30,7 +30,7 @@ public class CrudCelular {
 	private JTextField txtSistema;
 	private JTextField txtProcesador;
 	private JButton btnBorrar;
-	Celular cel=null;
+	Celular cel=new Celular();
 
 	/**
 	 * Launch the application.
@@ -60,7 +60,7 @@ public class CrudCelular {
 	 */
 	private void initialize() {
 		frmCelular = new JFrame();
-		frmCelular.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alumno\\Downloads\\1698764131163.jpg"));
+		frmCelular.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alumno\\Downloads\\6.png"));
 		frmCelular.setTitle("CrudCelular");
 		frmCelular.setBounds(100, 100, 411, 251);
 		frmCelular.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -191,7 +191,7 @@ public class CrudCelular {
 		btnElimanar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					int Idcel=Integer.parseInt(JOptionPane.showInputDialog("ID a cargar"));
+					int Idcel=Integer.parseInt(JOptionPane.showInputDialog("ID a eliminar"));
 					cel.setId(Idcel);
 					if(cel.eliminarCel()) {
 						JOptionPane.showMessageDialog(null, "good");
@@ -216,7 +216,7 @@ public class CrudCelular {
 				    cel.setSistema(txtSistema.getText());
 					cel.setProcesador(txtProcesador.getText());
 					if(cel.actualizarCel()) {
-						JOptionPane.showMessageDialog(null, "Inserto Correctamente");
+						JOptionPane.showMessageDialog(null, "Editado Correctamente");
 					}else {
 					JOptionPane.showMessageDialog(null, "Error ");
 					}

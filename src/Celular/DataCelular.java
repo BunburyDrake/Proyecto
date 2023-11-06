@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import hola.Alumno;
+
 
 
 
@@ -72,36 +72,19 @@ public class DataCelular {
 		}
 		
 	}
-	public boolean eliminarCel(int idcel) {
+	
+	public boolean actualizarCel(Celular c) {
 		PreparedStatement ps;
 		try {
 			Celular x=new Celular();
-			x.setId(idcel);
-			if(x.cargarCel()) {
-			ps = conectar().prepareStatement("DELETE FROM celular WHERE idcel=?");
-			ps.setInt(1,idcel);
-			ps.execute();
-				return true;
-			}else {
-				return false;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	public boolean actualizarCel(Celular a) {
-		PreparedStatement ps;
-		try {
-			Celular x=new Celular();
-			x.setId(c.getId);
+			x.setId(c.getId());
 			if(x.cargarCel()) {
 			ps = conectar().prepareStatement("UPDATE celular SET Marca=?,Modelo=?,Procesador=?,Sistema=? WHERE id=?");
-			ps.setString(1, a.getMarca());
-			ps.setString(2, a.getModelo());
-			ps.setString(3, a.getProcesador());
-			ps.setString(4, a.getSistema());	
-			ps.setInt(5, a.getId());
+			ps.setString(1, c.getMarca());
+			ps.setString(2, c.getModelo());
+			ps.setString(3, c.getProcesador());
+			ps.setString(4, c.getSistema());	
+			ps.setInt(5, c.getId());
 			ps.execute();
 			return true;
 			}else {
@@ -113,5 +96,22 @@ public class DataCelular {
 		}
 
 	}
-
+public boolean eliminarCel(int idcel) {
+		PreparedStatement ps;
+		try {
+			Celular x=new Celular();
+			x.setId(idcel);
+			if(x.cargarCel()) {
+			ps = conectar().prepareStatement("DELETE FROM celular WHERE id=?");
+			ps.setInt(1,idcel);
+			ps.execute();
+				return true;
+			}else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
