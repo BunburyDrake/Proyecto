@@ -1,18 +1,42 @@
 package Celular;
 
+import java.awt.Desktop;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+
+
 import javax.swing.JTextField;
-import java.awt.Font;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 
@@ -29,8 +53,9 @@ public class CrudCelular {
 	private JTextField txtModelo;
 	private JTextField txtSistema;
 	private JTextField txtProcesador;
-	private JButton btnBorrar;
+	public JButton btnPDf;
 	Celular cel=new Celular();
+	ArrayList<Celular> listaCelulares=new ArrayList<Celular>();
 
 	/**
 	 * Launch the application.
@@ -62,12 +87,12 @@ public class CrudCelular {
 		frmCelular = new JFrame();
 		frmCelular.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alumno\\Downloads\\6.png"));
 		frmCelular.setTitle("CrudCelular");
-		frmCelular.setBounds(100, 100, 411, 251);
+		frmCelular.setBounds(100, 100, 468, 329);
 		frmCelular.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCelular.getContentPane().setLayout(null);
 		
 		lblId = new JLabel("ID");
-		lblId.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblId.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
 		lblId.setHorizontalAlignment(SwingConstants.CENTER);
 		lblId.setBounds(10, 11, 116, 23);
 		frmCelular.getContentPane().add(lblId);
@@ -101,7 +126,7 @@ public class CrudCelular {
 		
 		lblMarca = new JLabel("Marca");
 		lblMarca.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMarca.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblMarca.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
 		lblMarca.setBounds(10, 45, 116, 23);
 		frmCelular.getContentPane().add(lblMarca);
 		
@@ -120,7 +145,7 @@ public class CrudCelular {
 		
 		lblModelo = new JLabel("Modelo");
 		lblModelo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblModelo.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblModelo.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
 		lblModelo.setBounds(10, 77, 116, 23);
 		frmCelular.getContentPane().add(lblModelo);
 		
@@ -139,7 +164,7 @@ public class CrudCelular {
 		
 		lblSistema = new JLabel("Sistema");
 		lblSistema.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSistema.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblSistema.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
 		lblSistema.setBounds(10, 109, 116, 23);
 		frmCelular.getContentPane().add(lblSistema);
 		
@@ -158,7 +183,7 @@ public class CrudCelular {
 		
 		lblProcesador = new JLabel("Procesador");
 		lblProcesador.setHorizontalAlignment(SwingConstants.CENTER);
-		lblProcesador.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblProcesador.setFont(new java.awt.Font("Tahoma", Font.BOLD, 15));
 		lblProcesador.setBounds(10, 141, 116, 23);
 		frmCelular.getContentPane().add(lblProcesador);
 		
@@ -184,7 +209,7 @@ public class CrudCelular {
 				}
 			}
 		});
-		btnAgregar.setBounds(245, 11, 125, 23);
+		btnAgregar.setBounds(10, 172, 132, 59);
 		frmCelular.getContentPane().add(btnAgregar);
 		
 		JButton btnElimanar = new JButton("Eliminar");
@@ -204,7 +229,7 @@ public class CrudCelular {
 			}
 			}
 		});
-		btnElimanar.setBounds(245, 43, 125, 23);
+		btnElimanar.setBounds(253, 77, 132, 59);
 		frmCelular.getContentPane().add(btnElimanar);
 		
 		JButton btnEditar = new JButton("Edtiar");
@@ -225,7 +250,7 @@ public class CrudCelular {
 					}
 			}
 		});
-		btnEditar.setBounds(245, 75, 125, 23);
+		btnEditar.setBounds(152, 172, 134, 59);
 		frmCelular.getContentPane().add(btnEditar);
 		
 		JButton btnCargar = new JButton("Cargar");
@@ -250,23 +275,104 @@ public class CrudCelular {
 			}
 			}
 		});
-		btnCargar.setBounds(245, 107, 125, 23);
+		btnCargar.setBounds(253, 11, 132, 59);
 		frmCelular.getContentPane().add(btnCargar);
 		
-		btnBorrar = new JButton("Borrar");
-		btnBorrar.addActionListener(new ActionListener() {
+		btnPDf = new JButton("PDF");
+		btnPDf.setBorder(null);
+		btnPDf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				limpiarFormulario();
+				generarPDF();
 			}
 		});
-		btnBorrar.setBounds(245, 140, 125, 23);
-		frmCelular.getContentPane().add(btnBorrar);
+        btnPDf.setIcon(new ImageIcon("C:\\Users\\Alumno\\Downloads\\descarga (1) (1).png"));
+        btnPDf.setFont(new java.awt.Font("Arial", Font.BOLD, 20));
+        btnPDf.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnPDf.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btnPDf.setHorizontalAlignment(SwingConstants.CENTER);
+        btnPDf.setBounds(296, 141, 97, 93);
+        frmCelular.getContentPane().add(btnPDf);
 	}
-	public void limpiarFormulario() {
-		txtId.setText("");
-		txtModelo.setText("");
-		txtMarca.setText("");
-		txtSistema.setText("");
-		txtProcesador.setText("");
+	public void generarPDF() {
+        try {
+               FileOutputStream archivo;
+               //RUTA ABSOLUTA
+               File file = new File("C:\\Users\\Alumno\\Documents\\kiss15\\practicassegundoparcial\\Proyecto\\src\\PDF\\PDF.pdf");
+               //RUTA RELATIVA
+//               File file = new File("pdf/reporteUsuario.pdf");
+               //JOptionPane.showMessageDialog(frmCrudCelular, "Ruta Path:" + file.getPath());
+               //JOptionPane.showMessageDialog(frmCrudCelular, "Ruta Absoluta:" + file.getAbsolutePath());
+               //JOptionPane.showMessageDialog(frmCrudCelular, "Ruta Canonica:" + file.getCanonicalPath());
+               archivo = new FileOutputStream(file);
+               Document doc = new Document();
+               PdfWriter.getInstance(doc, archivo);
+               doc.open();
+              Image img = Image.getInstance("C:\\\\Users\\\\Alumno\\\\Downloads\\\\descarga (1) (1).png");
+//               Image img = Image.getInstance(getClass().getResource("/imagenes/logooxxo.png"));
+               img.setAlignment(Element.ALIGN_CENTER);
+               img.scaleToFit(50, 50);
+               doc.add(img);
+               Paragraph p = new Paragraph(10);
+               Font negrita = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+               p.add(Chunk.NEWLINE);
+               p.add("CONTROL DE CELULARES");
+               p.add(Chunk.NEWLINE);
+               p.add(Chunk.NEWLINE);
+               p.setAlignment(Element.ALIGN_CENTER);
+               doc.add(p);
+               //Tabla de datos
+               PdfPTable tabla = new PdfPTable(5);
+               tabla.setWidthPercentage(100);
+               PdfPCell c1 = new PdfPCell(new Phrase("ID CEL", negrita));
+               PdfPCell c2 = new PdfPCell(new Phrase("MARCA", negrita));
+               PdfPCell c3 = new PdfPCell(new Phrase("MODELO", negrita));
+               PdfPCell c4 = new PdfPCell(new Phrase("SISTEMA", negrita));
+               PdfPCell c5 = new PdfPCell(new Phrase("PROCESADOR", negrita));
+               c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+               c2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+               c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+               c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+               c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+               c1.setBackgroundColor(BaseColor.PINK);
+               c2.setBackgroundColor(BaseColor.BLUE);
+               c3.setBackgroundColor(BaseColor.ORANGE);
+               c4.setBackgroundColor(BaseColor.GREEN);
+               c5.setBackgroundColor(BaseColor.RED);
+               tabla.addCell(c1);
+               tabla.addCell(c2);
+               tabla.addCell(c3);
+               tabla.addCell(c4);
+               tabla.addCell(c5);
+               //Agregar los registros
+               DataCelular dc=new DataCelular();
+               listaCelulares=dc.selectCelulares();
+               for (Celular c : listaCelulares) {
+                   tabla.addCell("" +c.getId());
+                   tabla.addCell("" + c.getMarca());
+                   tabla.addCell("" + c.getModelo());
+                   tabla.addCell("" + c.getSistema());
+                   tabla.addCell("" + c.getProcesador());
+               }
+               doc.add(tabla);
+               Paragraph p1 = new Paragraph(10);
+               p1.add(Chunk.NEWLINE);
+               p1.add("NÚMERO DE CELULARES: " + listaCelulares.size());
+               p1.add(Chunk.NEWLINE);
+               p1.add(Chunk.NEWLINE);
+               p1.setAlignment(Element.ALIGN_RIGHT);
+               doc.add(p1);
+               doc.close();
+               archivo.close();
+               Desktop.getDesktop().open(file);
+           } catch (FileNotFoundException ex) {
+           } catch (DocumentException ex) {
+           } catch (IOException ex) {
+               JOptionPane.showMessageDialog(frmCelular, "" + ex.getMessage());
+               //Logger.getLogger(todosPDF.class.getName()).log(Level.SEVERE, null, ex);
+           }
+   }
+	private Font Font(FontFamily helvetica, int i, int bold, BaseColor black) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

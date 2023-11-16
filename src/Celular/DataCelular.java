@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 
 
@@ -49,6 +50,7 @@ public class DataCelular {
 			return false;
 		}
 	}
+	
 	public boolean cargarCel(Celular c) {
 		PreparedStatement ps;
 		ResultSet rs=null;
@@ -72,6 +74,26 @@ public class DataCelular {
 		}
 		
 	}
+	public ArrayList<Celular> selectCelulares() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Celular> listaCelulares=new ArrayList<Celular>();
+        try {
+            ps = conectar().prepareStatement("SELECT * FROM celular");            
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Celular c=new Celular();
+                c.setId(rs.getInt(1));
+                c.setMarca(rs.getString(2));
+                c.setModelo(rs.getString(3));
+                c.setSistema(rs.getString(4));
+                c.setProcesador(rs.getString(5));
+                listaCelulares.add(c);
+            }
+        } catch (Exception e) {
+        }
+        return listaCelulares;
+    }
 	
 	public boolean actualizarCel(Celular c) {
 		PreparedStatement ps;
@@ -79,7 +101,7 @@ public class DataCelular {
 			Celular x=new Celular();
 			x.setId(c.getId());
 			if(x.cargarCel()) {
-			ps = conectar().prepareStatement("UPDATE celular SET Marca=?,Modelo=?,Procesador=?,Sistema=? WHERE id=?");
+			ps = conectar().prepareStatement("UPDATE celular SET Marca=?,Modelo=?,Sistema=?,Procesador=? WHERE id=?");
 			ps.setString(1, c.getMarca());
 			ps.setString(2, c.getModelo());
 			ps.setString(3, c.getProcesador());
